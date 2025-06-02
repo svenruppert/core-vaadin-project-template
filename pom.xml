@@ -90,6 +90,7 @@
         <vaadin.version>24.7.3</vaadin.version>
         <drivers.downloader.phase>pre-integration-test</drivers.downloader.phase>
         <jetty.version>11.0.25</jetty.version>
+        <warName>application</warName>
     </properties>
 
     <repositories>
@@ -204,7 +205,7 @@
 
     <build>
         <defaultGoal>jetty:run</defaultGoal>
-
+        <finalName>${warName}-${project.version}</finalName>
         <plugins>
             <!-- Jetty plugin for easy testing without a server -->
             <plugin>
@@ -240,6 +241,16 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+
+
             <plugin>
                 <inherited>true</inherited>
                 <groupId>org.apache.maven.plugins</groupId>
