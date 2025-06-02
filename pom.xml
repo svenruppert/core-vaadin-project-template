@@ -11,8 +11,9 @@
         <version>06.00.08</version>
     </parent>
 
-    <artifactId>template</artifactId>
+    <artifactId>flow-template</artifactId>
     <version>00.00.01-SNAPSHOT</version>
+    <packaging>war</packaging>
 
 
     <inceptionYear>2023</inceptionYear>
@@ -21,13 +22,14 @@
         <url>http://www.svenruppert.com</url>
     </organization>
 
-    <url>https://github.com/svenruppert/core-java-project-template</url>
-    <name>Core java project template</name>
+    <url>https://github.com/svenruppert/core-vaadin-project-template</url>
+    <name>Core Vaadin Project Template</name>
     <description>The beginning of your OSS project</description>
     <scm>
-        <url>https://github.com/svenruppert/core-java-project-template</url>
-        <connection>scm:git:https://github.com/svenruppert/core-java-project-template.git</connection>
-        <developerConnection>scm:git:https://github.com/svenruppert/core-java-project-template.git</developerConnection>
+        <url>https://github.com/svenruppert/core-vaadin-project-template</url>
+        <connection>scm:git:https://github.com/svenruppert/core-vaadin-project-template.git</connection>
+        <developerConnection>scm:git:https://github.com/svenruppert/core-vaadin-project-template.git
+        </developerConnection>
         <tag>HEAD</tag>
     </scm>
     <developers>
@@ -43,7 +45,7 @@
     </developers>
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/svenruppert/core-java-project-template/issues</url>
+        <url>https://github.com/svenruppert/core-vaadin-project-template/issues</url>
     </issueManagement>
     <licenses>
         <license>
@@ -56,7 +58,7 @@
 
     <properties>
 
-        <app.main.class>com.svenruppert.Application</app.main.class>
+        <app.main.class>com.svenruppert.rest.Application</app.main.class>
 
         <deploy-repo-url>https://repo.maven.apache.org/maven2/</deploy-repo-url>
         <deploy-repo-snapshots-url>https://repo.maven.apache.org/maven2/</deploy-repo-snapshots-url>
@@ -81,10 +83,94 @@
 
         <!--TDD jUnit5-->
         <junit-platform-maven-plugin.timeout>300</junit-platform-maven-plugin.timeout>
+
+        <!--        Vaadin Flow Properties-->
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+
+        <vaadin.version>24.7.3</vaadin.version>
+        <drivers.downloader.phase>pre-integration-test</drivers.downloader.phase>
+        <jetty.version>11.0.25</jetty.version>
     </properties>
 
+    <repositories>
+        <!-- The order of definitions matters. Explicitly defining central here to make sure it has the highest priority. -->
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>vaadin-prereleases</id>
+            <url>
+                https://maven.vaadin.com/vaadin-prereleases/
+            </url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <!-- Repository used by many Vaadin add-ons -->
+        <repository>
+            <id>Vaadin Directory</id>
+            <url>https://maven.vaadin.com/vaadin-addons</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>apache snapshots</id>
+            <url>https://repository.apache.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <!-- The order of definitions matters. Explicitly defining central here to make sure it has the highest priority. -->
+        <pluginRepository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>vaadin-prereleases</id>
+            <url>
+                https://maven.vaadin.com/vaadin-prereleases/
+            </url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-bom</artifactId>
+                <type>pom</type>
+                <scope>import</scope>
+                <version>${vaadin.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
-        <!--        DemoApplication?-->
+        <!--Vaadin Flow Dependencies-->
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <!-- Replace artifactId with vaadin-core to use only free components -->
+            <artifactId>vaadin-core</artifactId>
+            <!-- Remove the following exclussion if you want to enable Hilla -->
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vaadin</groupId>
+                    <artifactId>hilla-dev</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--        Demo REST Application-->
         <dependency>
             <groupId>io.javalin</groupId>
             <artifactId>javalin</artifactId>
@@ -96,6 +182,7 @@
             <version>6.6.0</version>
             <scope>test</scope>
         </dependency>
+
         <!--    REST-Testing-->
         <dependency>
             <groupId>io.rest-assured</groupId>
@@ -103,6 +190,7 @@
             <version>5.5.5</version>
             <scope>test</scope>
         </dependency>
+
         <!--    Logging-->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -115,7 +203,43 @@
     </dependencies>
 
     <build>
+        <defaultGoal>jetty:run</defaultGoal>
+
         <plugins>
+            <!-- Jetty plugin for easy testing without a server -->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jetty.version}</version>
+                <configuration>
+                    <!-- If using IntelliJ IDEA with autocompilation, this
+                    might cause lots of unnecessary compilations in the
+                    background.-->
+                    <scan>2</scan>
+                    <!-- Use war output directory to get the webpack files -->
+                    <webApp>
+                        <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
+                    </webApp>
+                </configuration>
+            </plugin>
+
+            <!--
+                Take care of synchronizing java dependencies and imports in
+                package.json and main.js files.
+                It also creates webpack.config.js if not exists yet.
+            -->
+            <plugin>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>${vaadin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-frontend</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <inherited>true</inherited>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -373,5 +497,94 @@
 
         </profile>
 
+        <profile>
+            <!-- Production mode is activated using -Pproduction -->
+            <id>production</id>
+
+            <dependencies>
+                <!-- Exclude development dependencies from production -->
+                <dependency>
+                    <groupId>com.vaadin</groupId>
+                    <artifactId>vaadin-core</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>com.vaadin</groupId>
+                            <artifactId>vaadin-dev</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.vaadin</groupId>
+                        <artifactId>vaadin-maven-plugin</artifactId>
+                        <version>${vaadin.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>build-frontend</goal>
+                                </goals>
+                                <phase>compile</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>it</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>${jetty.version}</version>
+                        <configuration>
+                            <scan>0</scan>
+                            <stopPort>8081</stopPort>
+                            <stopWait>5</stopWait>
+                            <stopKey>${project.artifactId}</stopKey>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start-jetty</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-jetty</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- Runs the integration tests (*IT) after the server is started -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>3.5.2</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <trimStackTrace>false</trimStackTrace>
+                            <enableAssertions>true</enableAssertions>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>

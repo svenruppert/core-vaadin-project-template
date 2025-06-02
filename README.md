@@ -1,8 +1,7 @@
-# core-java-project-template
+# core-vaadin-project-template
 
-A Template that can be used to start a Core Java Project.
-In this demo you will find a simple REST Server, based on Javalin.
-Tests are written for the services itself as well as for the REST Service.
+A Template that can be used to start a Core Vaadin Flow Project.
+In this demo you will find a simple UI, based on Vaadin Flow.
 
 ## What is offered by this template?
 
@@ -39,13 +38,9 @@ I will list a few provider so that you have a solid base to start with.
 * Run in Docker - Webservices..
 * PiTest in Docker mit Source Snapshot
 
-## Requirements:
-
-- podman: Instead of Docker Desktop I´m using podman.
-
 ## How to start
 
-* search and replace inside pom.xml - "https://github.com/svenruppert/core-java-project-template" with your coordinates.
+* search and replace inside pom.xml - "https://github.com/svenruppert/core-vaadin-project-template" with your coordinates.
 * define what is your JDK you want to use and change it - default is the latest Temurin LTS
   * inside the Docker image definitions
   * inside your pom.xml
