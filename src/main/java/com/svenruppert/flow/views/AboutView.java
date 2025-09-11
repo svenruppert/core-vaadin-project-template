@@ -7,15 +7,18 @@ import com.vaadin.flow.router.Route;
 
 import static com.vaadin.flow.component.html.AnchorTarget.BLANK;
 
-@Route(value = "about", layout = MainLayout.class)
+@Route(value = AboutView.PATH, layout = MainLayout.class)
 public class AboutView
     extends VerticalLayout {
+
+  public static final String PATH = "about";
 
   public AboutView() {
     H1 title = new H1("About");
     H2 subtitle = new H2("Vaadin Flow Demo Application");
 
-    Paragraph description = new Paragraph("This is a demo application built with Vaadin Flow framework to showcase various UI components and features.");
+    Paragraph description = new Paragraph("This is a demo application built with Vaadin Flow " +
+                                          "framework to showcase various UI components and features.");
 
     Paragraph version = new Paragraph("Version: 1.0.0");
     Paragraph author = new Paragraph("Created by: Sven Ruppert");

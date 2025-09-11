@@ -1,5 +1,8 @@
 package com.svenruppert.flow;
 
+import com.svenruppert.flow.views.AboutView;
+import com.svenruppert.flow.views.YoutubeView;
+import com.svenruppert.flow.views.main.MainView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H1;
@@ -29,16 +32,14 @@ public class MainLayout
     scroller.setClassName(LumoUtility.Padding.SMALL);
 
     DrawerToggle toggle = new DrawerToggle();
-    H2 viewTitle = new H2("Orders");
+    H2 viewTitle = new H2("Headline");
 
-//    HorizontalLayout subViews = getSecondaryNavigation();
-//    Element element = subViews.getElement();
 
     HorizontalLayout wrapper = new HorizontalLayout(toggle, viewTitle);
     wrapper.setAlignItems(FlexComponent.Alignment.CENTER);
     wrapper.setSpacing(false);
 
-//    VerticalLayout viewHeader = new VerticalLayout(wrapper, subViews);
+//    VerticalLayout viewHeader = new VerticalLayout(wrapper, getSecondaryNavigation());
     VerticalLayout viewHeader = new VerticalLayout(wrapper);
     viewHeader.setPadding(false);
     viewHeader.setSpacing(false);
@@ -51,11 +52,14 @@ public class MainLayout
 
   private SideNav getPrimaryNavigation() {
     SideNav sideNav = new SideNav();
-    sideNav.addItem(new SideNavItem("Dashboard", "/dashboard",
+    sideNav.addItem(new SideNavItem("Dashboard",
+                                    "/" + MainView.PATH,
                                     DASHBOARD.create()),
-                    new SideNavItem("Youtube", "/youtube",
+                    new SideNavItem("Youtube",
+                                    "/" + YoutubeView.PATH,
                                     CART.create()),
-                    new SideNavItem("About", "/about",
+                    new SideNavItem("About",
+                                    "/" + AboutView.PATH,
                                     USER_HEART.create())
     );
     return sideNav;
@@ -65,19 +69,21 @@ public class MainLayout
 //    HorizontalLayout navigation = new HorizontalLayout();
 //    navigation.addClassNames(LumoUtility.JustifyContent.CENTER,
 //                             LumoUtility.Gap.SMALL, LumoUtility.Height.MEDIUM);
+//    //TODO i18n
 //    RouterLink all = createLink("All");
 //    RouterLink open = createLink("Open");
 //    RouterLink completed = createLink("Completed");
 //    RouterLink cancelled = createLink("Cancelled");
+//
 //    navigation.add(all, open, completed, cancelled);
 //    return navigation;
 //  }
-
+//
 //  private RouterLink createLink(String viewName) {
 //    RouterLink link = new RouterLink();
 //    link.add(viewName);
 //    // Demo has no routes
-//    // link.setRoute(viewClass.java);
+//     //link.setRoute(YoutubeView.class);
 //
 //    link.addClassNames(LumoUtility.Display.FLEX,
 //                       LumoUtility.AlignItems.CENTER,
