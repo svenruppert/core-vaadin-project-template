@@ -13,13 +13,14 @@ import com.vaadin.flow.router.Route;
  * The main view contains a text field for getting the user name and a button
  * that shows a greeting message in a notification.
  */
-@Route(value = "", layout = MainLayout.class)
+@Route(value = MainView.PATH, layout = MainLayout.class)
 public class MainView
     extends VerticalLayout
     implements LocaleChangeObserver {
 
   public static final String YOUR_NAME = "your.name";
   public static final String SAY_HELLO = "say.hello";
+  public static final String PATH = "";
 
   private final GreetService greetService = new GreetService();
 

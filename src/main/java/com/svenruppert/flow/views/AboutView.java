@@ -7,9 +7,11 @@ import com.vaadin.flow.router.Route;
 
 import static com.vaadin.flow.component.html.AnchorTarget.BLANK;
 
-@Route(value = "about", layout = MainLayout.class)
+@Route(value = AboutView.PATH, layout = MainLayout.class)
 public class AboutView
     extends VerticalLayout {
+
+  public static final String PATH = "about";
 
   public AboutView() {
     H1 title = new H1("About");

@@ -5,9 +5,11 @@ import com.vaadin.flow.component.html.IFrame;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
-@Route(value = "youtube", layout = MainLayout.class)
+@Route(value = YoutubeView.PATH, layout = MainLayout.class)
 public class YoutubeView
     extends VerticalLayout {
+
+  public static final String PATH = "youtube";
 
   public YoutubeView() {
     IFrame youtubePlayer = new IFrame("https://www.youtube.com/embed/CxCMIc5Bx18");

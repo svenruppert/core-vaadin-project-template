@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.svenruppert</groupId>
         <artifactId>dependencies</artifactId>
-        <version>06.00.08</version>
+        <version>06.00.10</version>
     </parent>
 
     <artifactId>flow-template</artifactId>
@@ -58,7 +58,7 @@
 
     <properties>
 
-        <app.main.class>com.svenruppert.rest.Application</app.main.class>
+<!--        <app.main.class>com.svenruppert.rest.Application</app.main.class>-->
 
         <deploy-repo-url>https://repo.maven.apache.org/maven2/</deploy-repo-url>
         <deploy-repo-snapshots-url>https://repo.maven.apache.org/maven2/</deploy-repo-snapshots-url>
@@ -87,9 +87,9 @@
         <!--        Vaadin Flow Properties-->
         <failOnMissingWebXml>false</failOnMissingWebXml>
 
-        <vaadin.version>24.7.3</vaadin.version>
+        <vaadin.version>24.7.4</vaadin.version>
         <drivers.downloader.phase>pre-integration-test</drivers.downloader.phase>
-        <jetty.version>11.0.25</jetty.version>
+        <jetty.version>11.0.26</jetty.version>
         <warName>application</warName>
     </properties>
 
@@ -171,27 +171,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--        Demo REST Application-->
-        <dependency>
-            <groupId>io.javalin</groupId>
-            <artifactId>javalin</artifactId>
-            <version>6.6.0</version>
-        </dependency>
-        <dependency>
-            <groupId>io.javalin</groupId>
-            <artifactId>javalin-testtools</artifactId>
-            <version>6.6.0</version>
-            <scope>test</scope>
-        </dependency>
 
-        <!--    REST-Testing-->
         <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <version>5.5.5</version>
-            <scope>test</scope>
+            <groupId>com.svenruppert</groupId>
+            <artifactId>core</artifactId>
         </dependency>
-
         <!--    Logging-->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -330,7 +314,7 @@
                     <dependency>
                         <groupId>org.pitest</groupId>
                         <artifactId>pitest-junit5-plugin</artifactId>
-                        <version>1.2.2</version>
+                        <version>1.2.3</version>
                     </dependency>
 
                 </dependencies>
