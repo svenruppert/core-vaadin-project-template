@@ -88,8 +88,9 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <vaadin.version>25.1.1</vaadin.version>
         <drivers.downloader.phase>pre-integration-test</drivers.downloader.phase>
-        <jetty.version>12.1.7</jetty.version>
+        <jetty.version>12.1.8</jetty.version>
         <warName>ROOT</warName>
+        <slf4j-api.version>2.0.17</slf4j-api.version>
     </properties>
 
     <repositories>
@@ -153,26 +154,6 @@
                 <scope>import</scope>
                 <version>${vaadin.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
-                <version>2.21.0</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>2.21.0</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-annotations</artifactId>
-                <version>2.21</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.datatype</groupId>
-                <artifactId>jackson-datatype-jsr310</artifactId>
-                <version>2.21.0</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -204,38 +185,6 @@
             <groupId>com.svenruppert</groupId>
             <artifactId>core</artifactId>
         </dependency>
-
-        <!-- Log4j 2 SLF4J Binding (für SLF4J 2.x) -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j2-impl</artifactId>
-            <version>2.24.1</version>
-        </dependency>
-
-        <!-- Log4j 2 Core (Die eigentliche Logging-Logik) -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.24.1</version>
-        </dependency>
-
-        <!-- Log4j 2 API -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.24.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>2.0.17</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>2.0.17</version>
-        </dependency>
-
         <dependency>
             <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
@@ -251,24 +200,27 @@
             <artifactId>jackson-annotations</artifactId>
             <version>2.21</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>${slf4j-api.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
         <defaultGoal>jetty:run</defaultGoal>
         <!--        <finalName>${warName}-${project.version}</finalName>-->
         <plugins>
-            <!--            <plugin>-->
-            <!--                <groupId>org.eclipse.jetty</groupId>-->
-            <!--                <artifactId>jetty-maven-plugin</artifactId>-->
-            <!--                &lt;!&ndash;                <version>${jetty.version}</version>&ndash;&gt;-->
-            <!--                <version>11.0.26</version>-->
-            <!--                <configuration>-->
-            <!--                    <scan>2</scan>-->
-            <!--                    <webApp>-->
-            <!--                        <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>-->
-            <!--                    </webApp>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
             <plugin>
                 <groupId>org.eclipse.jetty.ee11</groupId>
                 <artifactId>jetty-ee11-maven-plugin</artifactId>
@@ -279,6 +231,24 @@
                         <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
                     </webApp>
                 </configuration>
+                <!--
+                    Force SLF4J 2.x onto the plugin's classloader. Jetty 12.1 internals
+                    call Logger.atDebug() (only exists in SLF4J 2.0+), but transitive
+                    Maven plugin deps still drag in slf4j-api 1.7.36, which otherwise
+                    wins at @Push teardown with a NoSuchMethodError.
+                -->
+                <dependencies>
+                    <dependency>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                        <version>${slf4j-api.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                        <version>${slf4j-api.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <!--
                 Take care of synchronizing java dependencies and imports in
