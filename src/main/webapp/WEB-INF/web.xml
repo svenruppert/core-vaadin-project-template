@@ -5,7 +5,7 @@
     </context-param>
     <servlet>
         <servlet-name>Vaadin Servlet</servlet-name>
-        <servlet-class>com.svenruppert.urlshortener.ui.vaadin.AppServlet</servlet-class>
+        <servlet-class>com.svenruppert.flow.AppServlet</servlet-class>
         <async-supported>true</async-supported>
         <load-on-startup>1</load-on-startup>
     </servlet>
