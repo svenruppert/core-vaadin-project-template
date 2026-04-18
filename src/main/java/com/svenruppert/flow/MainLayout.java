@@ -3,7 +3,6 @@ package com.svenruppert.flow;
 import com.svenruppert.flow.views.AboutView;
 import com.svenruppert.flow.views.YoutubeView;
 import com.svenruppert.flow.views.main.MainView;
-import com.svenruppert.flow.views.main.PushDemoView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H1;
@@ -56,9 +55,6 @@ public class MainLayout
     sideNav.addItem(new SideNavItem("Dashboard",
                                     "/" + MainView.PATH,
                                     DASHBOARD.create()),
-                    new SideNavItem("PushDemo",
-                                    "/" + PushDemoView.PATH,
-                                    ACADEMY_CAP.create()),
                     new SideNavItem("Youtube",
                                     "/" + YoutubeView.PATH,
                                     CART.create()),

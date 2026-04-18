@@ -5,6 +5,9 @@ import com.vaadin.flow.server.AppShellSettings;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
 /**
  * Typical use cases of AppShell
  * ✅ Viewport & mobile optimization
@@ -21,6 +24,8 @@ import com.vaadin.flow.theme.Theme;
 @Push
 public class AppShell
     implements AppShellConfigurator {
+
+
 
   @Override
   public void configurePage(AppShellSettings settings) {
