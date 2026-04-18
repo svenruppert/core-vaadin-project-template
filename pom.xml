@@ -86,10 +86,10 @@
 
         <!--        Vaadin Flow Properties-->
         <failOnMissingWebXml>false</failOnMissingWebXml>
-        <vaadin.version>25.1.0-beta2</vaadin.version>
+        <vaadin.version>25.1.1</vaadin.version>
         <drivers.downloader.phase>pre-integration-test</drivers.downloader.phase>
         <jetty.version>12.1.7</jetty.version>
-        <warName>application</warName>
+        <warName>ROOT</warName>
     </properties>
 
     <repositories>
@@ -182,23 +182,22 @@
         <dependency>
             <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>3.0.4</version>
+            <version>3.1.2</version>
         </dependency>
         <dependency>
             <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>3.0.4</version>
+            <version>3.1.2</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.20</version>
         </dependency>
     </dependencies>
 
     <build>
         <defaultGoal>jetty:run</defaultGoal>
-        <finalName>${warName}-${project.version}</finalName>
+<!--        <finalName>${warName}-${project.version}</finalName>-->
         <plugins>
             <!--            <plugin>-->
             <!--                <groupId>org.eclipse.jetty</groupId>-->
@@ -213,8 +212,8 @@
             <!--                </configuration>-->
             <!--            </plugin>-->
             <plugin>
-                <groupId>org.eclipse.jetty.ee10</groupId>
-                <artifactId>jetty-ee10-maven-plugin</artifactId>
+                <groupId>org.eclipse.jetty.ee11</groupId>
+                <artifactId>jetty-ee11-maven-plugin</artifactId>
                 <version>${jetty.version}</version>
                 <configuration>
                     <scan>2</scan>
@@ -248,6 +247,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <warName>${warName}</warName>
                 </configuration>
             </plugin>
 
